@@ -1,0 +1,12 @@
+# CogniField v10 — Dependencies
+# Core (required)
+numpy>=1.24
+scipy>=1.10
+scikit-learn>=1.2
+Pillow>=9.0
+
+# Optional: REST API server
+# flask>=2.0
+
+# Optional: development + testing
+# pytest>=7.0

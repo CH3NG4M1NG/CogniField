@@ -131,3 +131,29 @@ All notable changes are documented here.
 - `reasoning/reasoning_engine.py`
 - `environment/simple_env.py`
 - `tests/test_all.py` — 64 tests
+
+## [11.0.0 Part 2] — Embodied Intelligence Layer
+
+### Added
+- `agents/body.py` — VirtualBody with eyes/hands/mouth; 7 action types; full body state (health/hunger/energy/position/inventory)
+- `agents/perception.py` — PerceptionSystem: converts raw env output to structured Observations with signal classification (SUCCESS/FAILURE/RISK/DANGER/NOVEL) and automatic belief inference
+- `agents/action_system.py` — ActionSystem: validates actions against beliefs + safety rules before execution; logs all attempts
+- `core/interaction_loop.py` — InteractionLoop: 7-phase THINK→SIMULATE→DECIDE→ACT→OBSERVE→LEARN orchestrator
+- `docs/EMBODIED_GUIDE.md` — Complete embodied intelligence guide
+- `examples/demo_v11_part2.py` — 5-scenario embodied demo
+- `tests/test_v11_part2.py` — 132 tests
+
+### Extended CogniField API
+- `cf.act(action, object, force=False)` — execute single physical action
+- `cf.step(query)` — full 7-phase embodied loop
+- `cf.run_episode(queries)` — sequence of steps as episode
+- `cf.body_status()` — current body state snapshot
+
+### Safety
+- Unknown objects blocked at 3 independent layers (DeepThinker + Decide phase + ActionSystem)
+- Known inedible/toxic objects blocked even with force=False
+- Body health/hunger/energy track realistically
+
+### Test totals
+- v11 Part 2: 132 new tests
+- Grand total: 1315/1315 across 11 suites ✓
