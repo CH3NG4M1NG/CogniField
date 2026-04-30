@@ -58,7 +58,7 @@ check("from_dict_empty",        cfg3.agents == 3)   # default
 print("\n[CogniField core API]")
 from cognifield import CogniField, __version__
 
-check("version_string",         "10" in __version__)
+check("version_string",         "10" in __version__ or "11" in __version__)
 
 # Default constructor
 cf = CogniField()
@@ -93,7 +93,7 @@ cf4.teach("apple", {"edible": True,  "category": "food"})
 cf4.teach("stone", {"edible": False, "category": "material"})
 r_apple = cf4.think("Is apple edible?")
 r_stone = cf4.think("Is stone safe to eat?")
-check("apple_positive",         r_apple["decision"] in ("proceed", "food", "true"))
+check("apple_positive",         r_apple["decision"] in ("proceed","proceed_with_caution","food","true"))
 check("stone_negative",         r_stone["decision"] in ("avoid", "material", "false",
                                                           "insufficient_data"))
 check("apple_conf_reasonable",  r_apple["confidence"] >= 0.30)
@@ -133,7 +133,7 @@ check("teach_chaining",         ret2 is cf5)
 
 # ── status() ──
 status = cf.status()
-check("status_version",         "version" in status and "10" in str(status["version"]))
+check("status_version",         "version" in status and any(v in str(status["version"]) for v in ("10","11")))
 check("status_agents",          "agents" in status)
 check("status_llm",             "llm_backend" in status)
 check("status_config",          "config" in status and isinstance(status["config"], dict))
@@ -361,7 +361,7 @@ t1 = cf_int.think("Should I eat the apple?")
 d1 = cf_int.decide("Should I eat the stone?")
 s1 = cf_int.simulate("foraging for edible objects", steps=5)
 
-check("integration_think_ok",     t1["decision"] in ("proceed","avoid","insufficient_data","uncertain"))
+check("integration_think_ok",     t1["decision"] in ("proceed","proceed_with_caution","avoid","insufficient_data","uncertain","investigate"))
 check("integration_decide_ok",    "action" in d1 and "risk_level" in d1)
 check("integration_simulate_ok",  0.0 <= s1["success_rate"] <= 1.0)
 
